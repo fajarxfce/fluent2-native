@@ -1,0 +1,39 @@
+# Local tools and credentials
+local.properties
+**/local.properties
+.env
+.env.*
+!.env.example
+.idea/
+.vscode/
+*.iml
+.DS_Store
+
+# Generated build output
+node_modules/
+.gradle/
+.kotlin/
+**/build/
+**/.dart_tool/
+**/.flutter-plugins*
+**/coverage/
+**/Pods/
+**/.symlinks/
+**/ephemeral/
+**/DerivedData/
+**/Flutter/Generated.xcconfig
+**/Flutter/flutter_export_environment.sh
+**/Flutter/Flutter.framework/
+**/Flutter/App.framework/
+**/Flutter/Flutter.podspec
+**/Runner/GeneratedPluginRegistrant.*
+**/GeneratedPluginRegistrant.java
+artifacts/
+*.hprof
+*.jks
+*.keystore
+*.log
+__pycache__/
+
+# Optional local asset/smoke tooling
+.venv/

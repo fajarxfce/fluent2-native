@@ -1,0 +1,2 @@
+# Optional app-icon rendering and Android screenshot checks
+Pillow==12.3.0

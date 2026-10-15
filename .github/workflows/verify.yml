@@ -1,0 +1,75 @@
+name: Verify native ports
+on:
+  push:
+    branches: [main]
+    paths-ignore: ["**/*.md", "docs/**"]
+  pull_request:
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  tokens:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+          cache-dependency-path: tools/tokens/package-lock.json
+      - run: npm ci --prefix tools/tokens --ignore-scripts
+      - run: make check-tokens
+
+  flutter:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+      - uses: subosito/flutter-action@v2
+        with:
+          flutter-version: '3.47.5'
+          channel: stable
+          cache: true
+      - run: make test-flutter analyze
+      - run: make apk-flutter
+      - run: cd examples/flutter && flutter build web
+      - uses: actions/upload-artifact@v4
+        with:
+          name: fluent-flutter-apks
+          path: examples/flutter/build/app/outputs/flutter-apk/*-release.apk
+      - uses: actions/upload-artifact@v4
+        with:
+          name: fluent-flutter-web
+          path: examples/flutter/build/web
+
+  compose:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+      - uses: android-actions/setup-android@v3
+        with:
+          packages: platform-tools
+      - run: sdkmanager 'platforms;android-36' 'build-tools;35.0.0'
+      - uses: gradle/actions/setup-gradle@v4
+      - run: sudo apt-get update && sudo apt-get install -y xvfb libxi6 libxrender1 libxtst6 libgl1
+      - run: xvfb-run -a ./gradlew :fluent-compose:desktopTest :compose-catalog:compileKotlinDesktop :compose-catalog:assembleDebug :compose-catalog:wasmJsBrowserDistribution --stacktrace
+      - uses: actions/upload-artifact@v4
+        with:
+          name: fluent-compose-debug
+          path: examples/compose/build/outputs/apk/debug/compose-catalog-debug.apk
+      - uses: actions/upload-artifact@v4
+        with:
+          name: fluent-compose-web
+          path: examples/compose/build/dist/wasmJs/productionExecutable
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: compose-test-results
+          path: packages/compose/build/reports/tests/desktopTest

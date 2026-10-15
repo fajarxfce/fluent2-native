@@ -1,0 +1,21 @@
+name: fluent_catalog
+description: "The Fluent 2 Native interactive component catalog."
+publish_to: 'none'
+version: 0.1.0+1
+
+environment:
+  sdk: '>=3.8.0 <4.0.0'
+
+dependencies:
+  flutter:
+    sdk: flutter
+  fluent2_flutter:
+    path: ../../packages/flutter
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^6.0.0
+
+flutter:
+  uses-material-design: true
