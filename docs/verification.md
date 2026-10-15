@@ -43,3 +43,7 @@ Install the relevant APK before each command. The helper restarts only its targe
 | Flutter x86_64 release | `22169584f19072cb82f0c18673aa973c1c4d86d62077946e937b35a058b15a47` |
 
 The Flutter x86_64 APK was tested on the emulator; the arm64 APK was installed on the physical phone. These are hashes of the locally verified artifacts; CI rebuilds may differ because development signing keys and build environments differ.
+
+## GitHub Actions
+
+[Run 38768515153](https://github.com/fajarxfce/fluent2-native/actions/runs/38768515153) passed all three jobs: token/icon verification, Flutter tests/analysis/Android/web, and Compose tests/Android/Wasm. The run checks source commit `065cdc5`; later documentation-only commits do not retrigger builds.
